@@ -20,16 +20,13 @@ pipeline {
     stage('Deliver') {
       steps {
         sh '''
-          set -euxo pipefail
-
-          # Make sure an artifact exists
+          set -eux
           mvn -B -DskipTests -Denforcer.skip=true package
 
           echo "Contents of target/:"
           ls -la target
 
-          # Pick the jar that was built
-          JAR="$(ls -1 target/*.jar | head -n1)"
+          JAR=$(ls -1 target/*.jar | head -n1)
           echo "Running $JAR"
           java -jar "$JAR"
         '''
